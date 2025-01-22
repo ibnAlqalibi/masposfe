@@ -9,6 +9,7 @@ import ProductsCreateView from "@/views/products/create.vue";
 import ProductsUpdateView from "@/views/products/update.vue";
 
 import ExampleLayout from "@/layouts/ExampleLayout.vue";
+import MainLayout from "@/layouts/MainLayout.vue";
 
 // middleware
 import AuthMiddleware from "@/middleware/auth.middleware.js";
@@ -20,7 +21,7 @@ export default [
     component: HomeView,
     meta: {
       title: "Home",
-      layout: ExampleLayout,
+      layout: MainLayout,
       middleware: [AuthMiddleware],
     },
   },
@@ -60,7 +61,7 @@ export default [
     component: ProductsView,
     meta: {
       title: "Products",
-      layout: ExampleLayout,
+      layout: MainLayout,
       middleware: [AuthMiddleware],
     },
   },

@@ -17,7 +17,6 @@ export const useCategoriesStore = defineStore({
 
       if (categories) {
         this.categories = categories.data;
-        this.setCategoryId(categories.data[0].id);
       }
     },
     async add(data) {
