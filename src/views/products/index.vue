@@ -47,6 +47,9 @@
             <ButtonDanger class="ml-2" @click="deleteData(prod.id)">
               <i class="ri-delete-bin-line"></i>
             </ButtonDanger>
+            <buttonPrimary class="ml-2" @click="addToCart(prod)">
+              <i>+</i>
+            </buttonPrimary>
           </td>
         </tr>
         <tr v-if="filteredProducts.length === 0">
@@ -62,6 +65,7 @@
 <script>
 import { useProductsStore } from "@/stores/products.store.js";
 import { useCategoriesStore } from "@/stores/categories.store.js";
+import { useCartStore } from "@/stores/cart.store.js";
 import CategoriesView from "@/views/categories/index.vue";
 
 export default {
@@ -72,6 +76,7 @@ export default {
     return {
       ProductsStore: useProductsStore(),
       CategoriesStore: useCategoriesStore(),
+      CartStore: useCartStore(),
       search: "",
       filteredProducts: [],
     };
@@ -101,6 +106,16 @@ export default {
           .includes(this.search.toLowerCase());
         return matchesCategory && matchesSearch;
       });
+    },
+    addToCart(prod) {
+      const cartData = {
+        id: prod.id,
+        name: prod.name,
+        price: prod.price,
+        qty: 1,
+        subtotal: prod.price,
+      };
+      this.CartStore.add(cartData);
     },
     async deleteData(id) {
       const confirm = await this.$swal({

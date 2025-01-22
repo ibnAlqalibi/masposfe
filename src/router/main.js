@@ -3,6 +3,8 @@ import UserView from "@/views/user/index.vue";
 import UserCreateView from "@/views/user/create.vue";
 import UserUpdateView from "@/views/user/update.vue";
 import ProductsView from "@/views/products/index.vue";
+import CartView from "@/views/cart/index.vue";
+import CheckoutView from "@/views/cart/checkout.vue";
 import ProductsCreateView from "@/views/products/create.vue";
 import ProductsUpdateView from "@/views/products/update.vue";
 
@@ -58,6 +60,26 @@ export default [
     component: ProductsView,
     meta: {
       title: "Products",
+      layout: ExampleLayout,
+      middleware: [AuthMiddleware],
+    },
+  },
+  {
+    path: "/cart",
+    name: "cart",
+    component: CartView,
+    meta: {
+      title: "Cart",
+      layout: ExampleLayout,
+      middleware: [AuthMiddleware],
+    },
+  },
+  {
+    path: "/checkout",
+    name: "checkout",
+    component: CheckoutView,
+    meta: {
+      title: "checkout",
       layout: ExampleLayout,
       middleware: [AuthMiddleware],
     },

@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { useCategoriesStore } from "@/stores/categories.store.js";
 import { axiosWrapper } from "@/helper/axios-wrapper.js";
 
 const baseUrl = import.meta.env.VITE_BASE_URL;

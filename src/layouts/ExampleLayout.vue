@@ -1,7 +1,7 @@
 <template>
   <div class="w-screen h-[75px] bg-blue-200 flex justify-center items-center">
-    <router-link to="/" class="link">Home</router-link>
     <router-link to="/products" class="link">Products</router-link>
+    <router-link to="/cart" class="link">Cart</router-link>
     <div class="link" @click="authStore.logout()">Logout</div>
   </div>
   <div class="p-5">
