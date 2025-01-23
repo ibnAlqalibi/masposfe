@@ -1,4 +1,3 @@
-<!-- Header.vue -->
 <template>
   <div class="bg-[#ecf0f2] min-h-screen pt-6">
     <header class="bg-white p-2 rounded-lg shadow-md max-w-7xl mx-auto">
@@ -123,6 +122,22 @@
       </div>
     </header>
     <slot></slot>
+
+    <!-- Floating Action Buttons for Mobile -->
+    <div class="fixed bottom-4 right-4 flex space-x-2 md:hidden">
+      <button
+        class="px-3 py-1 text-gray-200 bg-blue-800 rounded-full shadow-lg text-md"
+        @click="$router.push('/category/create')"
+      >
+        + Kategori
+      </button>
+      <button
+        class="px-3 py-1 text-gray-200 bg-blue-800 rounded-full shadow-lg text-md"
+        @click="$router.push('/products/create')"
+      >
+        + Produk
+      </button>
+    </div>
   </div>
 </template>
 
@@ -130,7 +145,6 @@
 import CatComponent from "@/views/categories/index.vue";
 import { useCartStore } from "@/stores/cart.store.js";
 import { useAuthStore } from "@/stores/auth.store.js";
-import { Car } from "lucide-vue-next";
 
 export default {
   components: {
