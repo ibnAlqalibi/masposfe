@@ -7,6 +7,8 @@ export const useProductsStore = defineStore({
   id: "products",
   state: () => ({
     products: [],
+    filteredProducts: [],
+    search: "",
   }),
   actions: {
     async fetch() {
@@ -34,7 +36,11 @@ export const useProductsStore = defineStore({
       return await axiosWrapper.put(`${baseUrl}/product/${id}`, data, true);
     },
     async delete(id) {
-      return await axiosWrapper.delete(`${baseUrl}/product/${id}`, {}, true);
+      await axiosWrapper.delete(`${baseUrl}/product/${id}`, {}, true);
+      this.filteredProducts = this.filteredProducts.filter(
+        (product) => product.id !== id
+      );
+      this.products = this.products.filter((product) => product.id !== id);
     },
   },
 });

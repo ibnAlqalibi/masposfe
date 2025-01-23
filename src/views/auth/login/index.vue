@@ -1,44 +1,79 @@
 <template>
-  <h1 class="font-semibold text-lg">Login Page</h1>
-  <form action="" @submit.prevent="login">
-    <div class="mb-6">
-        <label for="email" class="block mb-2 text-sm font-medium text-gray-900 ">Email address</label>
-        <input v-model="formData.email" type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="john.doe@company.com" required>
+  <div class="flex justify-center items-center h-screen bg-[#2c59e5]">
+    <div class="w-full max-w-md bg-white p-8 rounded-lg shadow">
+      <h2 class="text-2xl font-bold mb-6 text-[#2c59e5]">Login</h2>
+      <form @submit.prevent="login">
+        <div class="mb-4">
+          <label for="email" class="block font-bold mb-2 text-gray-700"
+            >Email</label
+          >
+          <input
+            id="email"
+            v-model="formData.email"
+            type="email"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#2c59e5]"
+            placeholder="Enter your username"
+            required
+          />
+        </div>
+        <div class="mb-4">
+          <label for="password" class="block font-bold mb-2 text-gray-700"
+            >Password</label
+          >
+          <div class="relative">
+            <input
+              :type="showPassword ? 'text' : 'password'"
+              id="password"
+              v-model="formData.password"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#2c59e5]"
+              placeholder="Enter your password"
+              required
+            />
+            <button
+              type="button"
+              @click="toggleShowPassword"
+              class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-600"
+            >
+              <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+            </button>
+          </div>
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-[#2c59e5] text-white py-2 px-4 rounded-md hover:bg-[#1e45b2] focus:outline-none"
+        >
+          Login
+        </button>
+      </form>
     </div>
-    <div class="mb-6">
-        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 ">Password</label>
-        <input v-model="formData.password" type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="•••••••••" required>
-    </div>
-    <ButtonPrimary :type="'submit'">
-      Login
-    </ButtonPrimary>
-    <ButtonDanger @click="$router.push('/register')" class="ml-3">
-      Register
-    </ButtonDanger>
-  </form>
-
+  </div>
 </template>
 
 <script>
-  import {
-    useAuthStore
-  } from "@/stores/auth.store.js"
+import { useAuthStore } from "@/stores/auth.store.js";
 
-  export default {
-    data() {
-      return {
-        authStore: useAuthStore(),
-        formData: {
-          email: "",
-          password: "",
-        }
-      }
+export default {
+  data() {
+    return {
+      authStore: useAuthStore(),
+      formData: {
+        email: "",
+        password: "",
+      },
+      showPassword: false,
+    };
+  },
+  methods: {
+    login() {
+      this.authStore.login(this.formData);
     },
-    methods: {
-      login() {
-        this.authStore.login(this.formData)
-      }
-    }
-  }
-
+    toggleShowPassword() {
+      this.showPassword = !this.showPassword;
+    },
+  },
+};
 </script>
+
+<style>
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css");
+</style>

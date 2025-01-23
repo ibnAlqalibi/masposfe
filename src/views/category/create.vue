@@ -1,29 +1,3 @@
-<!-- <template>
-  <div class="flex justify-between items-center">
-    <h1 class="font-semibold text-lg">Add User Page</h1>
-  </div>
-
-  <form action="" @submit.prevent="create">
-    <div class="mb-6">
-      <label for="name" class="block mb-2 text-sm font-medium text-gray-900"
-        >Name <span class="text-red-600">*</span></label
-      >
-      <input
-        v-model="formData.name"
-        type="name"
-        id="name"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="John Doe"
-        required
-      />
-    </div>
-    <ButtonPrimary :type="'submit'"> Submit </ButtonPrimary>
-    <ButtonDanger @click="$router.push('/user')" class="ml-3">
-      Cancel
-    </ButtonDanger>
-  </form>
-</template>
--->
 <script>
 import { useCategoriesStore } from "@/stores/categories.store.js";
 
@@ -34,14 +8,39 @@ export default {
       formData: {
         name: null,
       },
+      errors: {
+        name: null,
+      },
     };
+  },
+  mounted() {
+    this.categoriesStore.fetch();
+  },
+  computed: {
+    isNameDuplicate() {
+      return this.categoriesStore.categories.some(
+        (category) => category.name === this.formData.name
+      );
+    },
   },
   methods: {
     async create() {
+      this.errors.name = null;
+
+      if (!this.formData.name) {
+        this.errors.name = "Nama Kategori Wajib Diisi.";
+        return;
+      }
+
+      if (this.isNameDuplicate) {
+        this.errors.name = "Nama Kategori Sudah ada.";
+        return;
+      }
+
       let cat = await this.categoriesStore.add(this.formData);
 
       if (cat) {
-        this.$router.push("/products");
+        this.$router.push("/");
       }
     },
   },
@@ -49,22 +48,25 @@ export default {
 </script>
 
 <template>
-  <div class="min-h-screen w-full flex justify-center bg-[#ecf0f2] py-12">
+  <div class="w-full flex justify-center bg-[#ecf0f2] py-12">
     <div class="w-full max-w-md p-6 bg-white rounded-lg shadow">
-      <h2 class="text-lg font-medium mb-4">Tambah Produk</h2>
+      <h2 class="text-lg font-medium mb-4">Tambah Kategori</h2>
       <form action="" @submit.prevent="create">
         <div class="space-y-4">
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Produk</label
+              >Nama Kategori</label
             >
             <input
               v-model="formData.name"
-              type="name"
+              type="text"
               id="name"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
               placeholder="Produk"
             />
+            <span v-if="errors.name" class="text-red-500 text-sm">{{
+              errors.name
+            }}</span>
           </div>
 
           <div class="flex space-x-4 pt-2">

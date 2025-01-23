@@ -4,9 +4,11 @@
     <!-- Search Bar -->
     <div class="relative">
       <input
+        v-model="ProductsStore.search"
         type="text"
         placeholder="Cari nama produk..."
         class="w-64 px-4 py-2 pl-10 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-blue-500"
+        @input="filterProducts"
       />
       <span class="absolute inset-y-0 left-3 flex items-center">
         <svg
@@ -101,9 +103,11 @@
   <div class="md:hidden">
     <div class="px-2 pt-2 pb-3 space-y-1">
       <input
+        v-model="ProductsStore.search"
         type="text"
         placeholder="Cari nama produk..."
         class="w-full px-4 py-2 rounded-lg border border-gray-300 mb-2"
+        @input="filterProducts"
       />
       <div class="flex overflow-x-auto space-x-2 pb-2">
         <button
@@ -138,12 +142,14 @@
 
 <script>
 import { useCategoriesStore } from "@/stores/categories.store.js";
-import { ref, onMounted } from "vue";
+import { useProductsStore } from "@/stores/products.store.js";
+import { ref, onMounted, watch } from "vue";
 
 export default {
   setup() {
     // Inisialisasi store
     const CategoriesStore = useCategoriesStore();
+    const ProductsStore = useProductsStore();
 
     // Referensi ke elemen DOM
     const categoriesContainer = ref(null);
@@ -165,7 +171,34 @@ export default {
       if (!categoriesContainer.value) {
         console.error("categoriesContainer element not found in the DOM");
       }
+
+      setActiveCategory(CategoriesStore.category_id);
+
+      //   // Fetch produk initial
+      ProductsStore.fetch().then(() => {
+        filterProducts();
+      });
+
+      // useEffect/LaunchedEffect/sideEffect
+      watch(
+        () => CategoriesStore.category_id,
+        () => {
+          filterProducts();
+        }
+      );
     });
+
+    const filterProducts = () => {
+      ProductsStore.filteredProducts = ProductsStore.products.filter((prod) => {
+        const matchesCategory =
+          !CategoriesStore.category_id ||
+          prod.category_id === CategoriesStore.category_id;
+        const matchesSearch = prod.name
+          .toLowerCase()
+          .includes(ProductsStore.search.toLowerCase());
+        return matchesCategory && matchesSearch;
+      });
+    };
 
     // Metode untuk scroll
     const scrollLeft = () => {
@@ -198,6 +231,8 @@ export default {
       scrollRight,
       activeCategory,
       setActiveCategory,
+      filterProducts,
+      ProductsStore,
     };
   },
 };

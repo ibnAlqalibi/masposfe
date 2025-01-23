@@ -1,13 +1,14 @@
 <template>
-  <div class="relative overflow-x-auto mt-5">
+  <div class="max-w-7xl mx-auto pt-6 px-2">
     <table class="w-full text-sm text-left text-gray-500">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
         <tr>
-          <th scope="col" class="px-6 py-3">Name</th>
+          <th scope="col" class="px-6 py-3">Gambar</th>
+          <th scope="col" class="px-6 py-3">Nama</th>
           <th scope="col" class="px-6 py-3">Harga</th>
           <th scope="col" class="px-6 py-3">Qty</th>
           <th scope="col" class="px-6 py-3">Subtotal</th>
-          <th scope="col" class="px-6 py-3">Action</th>
+          <th scope="col" class="px-6 py-3"></th>
         </tr>
       </thead>
       <tbody>
@@ -16,6 +17,16 @@
           :key="prod.id"
           class="bg-white border-b"
         >
+          <td
+            scope="row"
+            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+          >
+            <img
+              :src="prod.picture_url"
+              alt="Product"
+              class="w-auto h-20 object-cover rounded-lg"
+            />
+          </td>
           <td
             scope="row"
             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
@@ -32,7 +43,23 @@
             scope="row"
             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
           >
-            {{ prod.qty }}
+            <div class="flex items-center justify-between mt-1.5 sm:mt-2">
+              <button
+                class="bg-gray-200 text-gray-800 py-1 sm:py-1.5 px-2 sm:px-3 rounded-lg text-xs sm:text-sm"
+                @click="CartStore.updateQty(prod.id, 'decrement')"
+              >
+                -
+              </button>
+              <span class="text-xs sm:text-sm">{{
+                CartStore.cart.find((cart) => cart.id === prod.id).qty
+              }}</span>
+              <button
+                class="bg-gray-200 text-gray-800 py-1 sm:py-1.5 px-2 sm:px-3 rounded-lg text-xs sm:text-sm"
+                @click="CartStore.updateQty(prod.id, 'increment')"
+              >
+                +
+              </button>
+            </div>
           </td>
           <td
             scope="row"
@@ -42,37 +69,37 @@
           </td>
 
           <td class="px-6 py-4">
-            <ButtonDanger class="ml-2" @click="CartStore.delete(prod.id)">
-              <i class="ri-delete-bin-line"></i>
-            </ButtonDanger>
-            <ButtonDanger
-              class="ml-2"
-              @click="CartStore.updateQty(prod.id, `decrement`)"
+            <a
+              class="ml-2 cursor-pointer text-red-500"
+              @click="CartStore.delete(prod.id)"
             >
-              <i>-</i>
-            </ButtonDanger>
-            <ButtonPrimary
-              class="ml-2"
-              @click="CartStore.updateQty(prod.id, `increment`)"
-            >
-              <i>+</i>
-            </ButtonPrimary>
+              Hapus
+            </a>
           </td>
         </tr>
-        <tr v-if="CartStore.cart.length === 0">
-          <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+        <tr v-if="CartStore.cart.length === 0" class="bg-white border-b">
+          <td colspan="6" class="px-6 py-4 text-center text-gray-500">
             No products found.
           </td>
         </tr>
       </tbody>
+      <tfoot v-if="CartStore.cart.length > 0">
+        <tr class="bg-white">
+          <td
+            colspan="6"
+            class="px-6 py-4 text-right font-medium text-gray-900"
+          >
+            Grand total:
+            {{ CartStore.cart.reduce((acc, prod) => acc + prod.subtotal, 0) }}
+          </td>
+        </tr>
+        <tr class="bg-white border-b">
+          <td colspan="6" class="px-6 py-4 text-right">
+            <ButtonPrimary @click="bayar"> Bayar </ButtonPrimary>
+          </td>
+        </tr>
+      </tfoot>
     </table>
-    <i class="flex justify-end mt-5"
-      >Grand total:
-      {{ CartStore.cart.reduce((acc, prod) => acc + prod.subtotal, 0) }}</i
-    >
-    <div class="flex justify-end mt-5">
-      <ButtonPrimary @click="$router.push('/checkout')"> Bayar </ButtonPrimary>
-    </div>
   </div>
 </template>
 
@@ -109,6 +136,26 @@ export default {
     updateData(prod) {
       this.CartStore.cat = prod;
       this.$router.push("/products/update");
+    },
+    async bayar() {
+      const confirm = await this.$swal({
+        title: "Bayar",
+        text: "Apakah anda yakin ingin melanjutkan pembayaran?",
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "Ya",
+      });
+
+      if (confirm.isConfirmed) {
+        this.CartStore.clear();
+
+        await this.$swal({
+          title: "Pembayaran Berhasil",
+          text: "Terima kasih telah melakukan pembayaran!",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+      }
     },
   },
 };
