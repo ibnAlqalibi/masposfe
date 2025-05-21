@@ -9,25 +9,25 @@
             class="flex items-center cursor-pointer"
             @click="$router.push('/')"
           >
-            <h1 class="text-blue-600 text-xl font-bold">MASPOS</h1>
+            <h1 class="text-blue-600 text-xl font-bold title">MASPOS</h1>
           </div>
 
           <!-- Action Buttons and Profile -->
           <div class="flex items-center space-x-4">
             <!-- Add Category Button -->
             <button
-              class="hidden md:flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+              class="hidden md:flex items-center justify-center gap-1 px-4 py-2 bg-blue-600 text-white rounded-lg text-[16px]"
               @click="$router.push('/category/create')"
             >
-              + Tambah Kategori
+              <PlusIcon class="w-[16px] h-[16px] text-white" />Tambah Kategori
             </button>
 
             <!-- Add Product Button -->
             <button
-              class="hidden md:flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+              class="hidden md:flex items-center justify-center gap-1 px-4 py-2 bg-blue-600 text-white rounded-lg text-[16px]"
               @click="$router.push('/products/create')"
             >
-              + Tambah Produk
+              <PlusIcon class="w-[16px] h-[16px] text-white" />Tambah Produk
             </button>
 
             <!-- Cart -->
@@ -145,10 +145,12 @@
 import CatComponent from "@/views/categories/index.vue";
 import { useCartStore } from "@/stores/cart.store.js";
 import { useAuthStore } from "@/stores/auth.store.js";
+import { PlusIcon } from "@heroicons/vue/24/solid";
 
 export default {
   components: {
     CatComponent,
+    PlusIcon,
   },
   data() {
     return {

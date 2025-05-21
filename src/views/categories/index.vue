@@ -6,8 +6,8 @@
       <input
         v-model="ProductsStore.search"
         type="text"
-        placeholder="Cari nama produk..."
-        class="w-64 px-4 py-2 pl-10 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-blue-500"
+        placeholder="Cari nama produk ..."
+        class="font-sf w-64 px-4 py-2 pl-10 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-blue-500"
         @input="filterProducts"
       />
       <span class="absolute inset-y-0 left-3 flex items-center">
@@ -105,7 +105,7 @@
       <input
         v-model="ProductsStore.search"
         type="text"
-        placeholder="Cari nama produk..."
+        placeholder="Cari nama produk ..."
         class="w-full px-4 py-2 rounded-lg border border-gray-300 mb-2"
         @input="filterProducts"
       />

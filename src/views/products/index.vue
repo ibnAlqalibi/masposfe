@@ -6,20 +6,20 @@
       <div
         v-for="product in ProductsStore.filteredProducts"
         :key="product.id"
-        class="bg-white rounded-lg shadow-md overflow-hidden min-w-0"
+        class="bg-white rounded-[16px] border border-[#d6d6d6] overflow-hidden min-w-0"
       >
         <!-- Product Image Container -->
-        <div class="relative aspect-square">
+        <div class="relative aspect-square p-[8px]">
           <img
             :src="product.picture_url"
             :alt="product.name"
-            class="w-full h-full object-cover"
+            class="w-full h-full object-cover rounded-[8px]"
           />
           <!-- Action Buttons -->
-          <div class="absolute bottom-2 right-2 flex gap-1 sm:gap-2">
+          <div class="absolute bottom-[14px] right-[14px] flex gap-1 sm:gap-2">
             <!-- Delete Button -->
             <button
-              class="p-1 sm:p-1.5 bg-white rounded-lg shadow-md hover:bg-gray-50"
+              class="p-1 sm:p-1.5 bg-white/50 backdrop-blur-[30px] rounded-[4px] border border-white/50 hover:bg-gray-50"
               @click="deleteData(product.id)"
             >
               <svg
@@ -43,11 +43,11 @@
         <!-- Product Info -->
         <div class="p-2 sm:p-3">
           <!-- sesuaikan padding -->
-          <h3 class="text-xs sm:text-sm font-medium truncate">
+          <h3 class="regular text-[#0F0F0F] text-xs sm:text-[16px] font-[500]">
             {{ product.name }}
           </h3>
           <p
-            class="text-blue-600 font-semibold mt-0.5 sm:mt-1 text-xs sm:text-sm"
+            class="regular text-[#23A948] font-[700] mt-0.5 sm:mt-1 sm:text-[16px]"
           >
             Rp {{ product.price.toLocaleString() }}
           </p>
@@ -55,11 +55,11 @@
           <!-- Add to Cart Button -->
           <button
             v-if="!CartStore.cart.find((cart) => cart.id === product.id)"
-            class="w-full mt-1.5 sm:mt-2 bg-blue-600 text-white py-1 sm:py-1.5 px-2 sm:px-3 rounded-lg text-xs sm:text-sm flex items-center justify-center gap-1"
+            class="regular w-full mt-1.5 sm:mt-2 bg-[#2C59E5] text-[#F5F5F5] py-1 sm:py-1.5 px-2 sm:px-3 rounded-[8px] text-[16px] flex items-center justify-center gap-1"
             @click="addToCart(product)"
           >
-            <span>+</span>
-            Keranjang
+            <PlusIcon class="w-[16px] h-[16px] text-white" />
+            <span class="align-middle leading-none">Keranjang</span>
           </button>
           <div v-else class="flex items-center justify-between mt-1.5 sm:mt-2">
             <button
@@ -89,10 +89,12 @@ import { useProductsStore } from "@/stores/products.store.js";
 import { useCategoriesStore } from "@/stores/categories.store.js";
 import { useCartStore } from "@/stores/cart.store.js";
 import CategoriesView from "@/views/categories/index.vue";
+import { PlusIcon } from "@heroicons/vue/24/solid";
 
 export default {
   components: {
     CategoriesView,
+    PlusIcon,
   },
   data() {
     return {
