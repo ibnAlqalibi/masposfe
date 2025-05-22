@@ -1,9 +1,9 @@
 <template>
   <div class="bg-[#ecf0f2] min-h-screen pt-6">
-    <header class="bg-white p-2 rounded-lg shadow-md max-w-7xl mx-auto">
+    <header class="bg-white p-2 rounded-lg shadow-md w-[1260px] mx-auto">
       <div class="px-4 sm:px-6 lg:px-8">
         <!-- Top Section -->
-        <div class="flex items-center justify-between h-16 mb-2">
+        <div class="flex items-center justify-between h-16">
           <!-- Logo -->
           <div
             class="flex items-center cursor-pointer"
@@ -16,7 +16,7 @@
           <div class="flex items-center space-x-4">
             <!-- Add Category Button -->
             <button
-              class="hidden md:flex items-center justify-center gap-1 px-4 py-2 bg-blue-600 text-white rounded-lg text-[16px]"
+              class="hidden md:flex h-[48px] items-center justify-center gap-1 px-4 py-2 bg-[#2C59E5] text-white rounded-lg text-[16px]"
               @click="$router.push('/category/create')"
             >
               <PlusIcon class="w-[16px] h-[16px] text-white" />Tambah Kategori
@@ -24,46 +24,35 @@
 
             <!-- Add Product Button -->
             <button
-              class="hidden md:flex items-center justify-center gap-1 px-4 py-2 bg-blue-600 text-white rounded-lg text-[16px]"
+              class="hidden md:flex h-[48px] items-center justify-center gap-1 px-4 py-2 bg-[#2C59E5] text-white rounded-lg text-[16px]"
               @click="$router.push('/products/create')"
             >
               <PlusIcon class="w-[16px] h-[16px] text-white" />Tambah Produk
             </button>
 
             <!-- Cart -->
-            <div class="relative" @click="$router.push('/cart')">
+            <div
+              class="relative bg-[#E8EDFC] h-[47px] rounded-[8px] flex items-center justify-between cursor-pointer"
+              @click="$router.push('/cart')"
+            >
               <button class="flex items-center">
-                <div class="bg-blue-50 p-2 rounded-lg relative">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6 text-blue-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
-                  <span
-                    v-if="
-                      CartStore.cart.reduce(
-                        (total, item) => total + item.qty,
-                        0
-                      ) > 0
-                    "
-                    class="absolute -top-1 -right-1 bg-green-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
-                  >
-                    {{
-                      CartStore.cart.reduce(
-                        (total, item) => total + item.qty,
-                        0
-                      )
-                    }}
-                  </span>
+                <span
+                  v-if="
+                    CartStore.cart.reduce(
+                      (total, item) => total + item.qty,
+                      0
+                    ) > 0
+                  "
+                  class="absolute -top-1 left-6 bg-green-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+                >
+                  {{
+                    CartStore.cart.reduce((total, item) => total + item.qty, 0)
+                  }}
+                </span>
+                <div
+                  class="bg-[#2C59E5] p-2 rounded-[6px] h-[47px] w-[47px] flex items-center justify-center"
+                >
+                  <ShoppingCartIcon class="w-[18px] h-[18px] text-white" />
                 </div>
                 <div
                   v-if="
@@ -72,10 +61,12 @@
                       0
                     ) > 0
                   "
-                  class="ml-2 flex flex-col md:flex-row md:items-center"
+                  class="flex flex-col md:flex-row md:items-center m-[8px]"
                 >
-                  <span class="text-xs text-gray-500"> Total Tagihan </span>
-                  <span class="font-semibold text-sm md:ml-2"
+                  <span class="text-[16px] text-[#2C59E5] font-[400]">
+                    Total Tagihan
+                  </span>
+                  <span class="font-[700] text-[16px] text-[#2C59E5] md:ml-2"
                     >Rp
                     {{
                       CartStore.cart
@@ -86,37 +77,29 @@
                 </div>
               </button>
             </div>
-
+            <div class="w-px h-[47px] bg-gray-200"></div>
             <!-- Profile -->
             <div
-              class="flex items-center bg-gray-50 px-3 py-1.5 rounded-lg cursor-pointer"
+              class="flex items-center hover:bg-gray-50 mx-[8px] px-[8px] py-1.5 rounded-lg cursor-pointer"
               @click="AuthStore.logout"
             >
               <div class="flex items-center space-x-2">
                 <div
-                  class="w-8 h-8 bg-white rounded-full flex items-center justify-center"
+                  class="w-[48px] h-[48px] rounded-full flex items-center justify-center"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6 text-blue-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-10V5m0 10v1m0-10V5"
-                    />
-                  </svg>
+                  <img
+                    :src="logourl"
+                    alt="Logout"
+                    class="w-full h-full object-cover rounded-full"
+                  />
                 </div>
-                <span class="text-sm">Logout</span>
+                <span class="regular text-[12px]">Aldean</span>
               </div>
             </div>
           </div>
         </div>
         <template v-if="$route.path === '/'">
+          <div class="w-full h-px bg-gray-200 my-[12px]"></div>
           <CatComponent />
         </template>
       </div>
@@ -146,16 +129,20 @@ import CatComponent from "@/views/categories/index.vue";
 import { useCartStore } from "@/stores/cart.store.js";
 import { useAuthStore } from "@/stores/auth.store.js";
 import { PlusIcon } from "@heroicons/vue/24/solid";
+import { ShoppingCartIcon } from "@heroicons/vue/24/outline";
+import logo from "@/assets/pfp.jpg";
 
 export default {
   components: {
     CatComponent,
     PlusIcon,
+    ShoppingCartIcon,
   },
   data() {
     return {
       CartStore: useCartStore(),
       AuthStore: useAuthStore(),
+      logourl: logo,
     };
   },
 };

@@ -7,25 +7,12 @@
         v-model="ProductsStore.search"
         type="text"
         placeholder="Cari nama produk ..."
-        class="font-sf w-64 px-4 py-2 pl-10 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-blue-500"
+        class="font-sf w-[256px] bg-[#EDF0F2] px-4 py-2 pl-10 rounded-[8px] text-sm focus:outline-none focus:border-blue-500"
         @input="filterProducts"
       />
-      <span class="absolute inset-y-0 left-3 flex items-center">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5 text-gray-400"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-          />
-        </svg>
-      </span>
+      <MagnifyingGlassIcon
+        class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#2C59E5]"
+      />
     </div>
 
     <button
@@ -49,17 +36,17 @@
     <!-- Categories -->
     <div
       ref="categoriesContainer"
-      class="flex space-x-2 overflow-x-auto categories-scroll px-10"
+      class="flex space-x-[16px] overflow-x-auto categories-scroll"
     >
       <button
         :key="'semua'"
         @click="setActiveCategory(null)"
         :class="
           activeCategory === null
-            ? 'bg-blue-600 text-white'
-            : 'text-blue-600 hover:bg-blue-50'
+            ? 'bg-[#2C59E5] text-white'
+            : 'text-[#2C59E5] bg-blue-50'
         "
-        class="px-4 py-2 rounded-lg text-sm whitespace-nowrap"
+        class="px-[16px] h-[32px] rounded-lg text-sm whitespace-nowrap"
       >
         Semua
       </button>
@@ -71,10 +58,10 @@
         @click="setActiveCategory(category.id)"
         :class="
           activeCategory === category.id
-            ? 'bg-blue-600 text-white'
-            : 'text-blue-600 hover:bg-blue-50'
+            ? 'bg-[#2C59E5] text-white'
+            : 'text-[#2C59E5] bg-blue-50'
         "
-        class="px-4 py-2 rounded-lg text-sm whitespace-nowrap"
+        class="px-[16px] h-[32px] rounded-lg text-sm whitespace-nowrap"
       >
         {{ category.name }}
       </button>
@@ -141,99 +128,83 @@
 </template>
 
 <script>
+import { ref, watch } from "vue";
 import { useCategoriesStore } from "@/stores/categories.store.js";
 import { useProductsStore } from "@/stores/products.store.js";
-import { ref, onMounted, watch } from "vue";
+import { MagnifyingGlassIcon } from "@heroicons/vue/24/outline";
 
 export default {
-  setup() {
-    // Inisialisasi store
-    const CategoriesStore = useCategoriesStore();
-    const ProductsStore = useProductsStore();
-
-    // Referensi ke elemen DOM
-    const categoriesContainer = ref(null);
-
-    // Properti reaktif untuk menyimpan ID kategori aktif
-    const activeCategory = ref(null);
-
-    // Fungsi untuk mengubah kategori aktif
-    const setActiveCategory = (id) => {
-      activeCategory.value = id;
-      CategoriesStore.setCategoryId(id);
+  components: {
+    MagnifyingGlassIcon,
+  },
+  data() {
+    return {
+      CategoriesStore: useCategoriesStore(),
+      ProductsStore: useProductsStore(),
+      categoriesContainer: null,
+      activeCategory: null,
     };
+  },
+  mounted() {
+    this.CategoriesStore.fetch();
+    this.categoriesContainer = document.querySelector(".categories-scroll");
 
-    // Lifecycle hook untuk memastikan DOM siap
-    onMounted(() => {
-      CategoriesStore.fetch();
-      // Elemen sudah tersedia di DOM
-      categoriesContainer.value = document.querySelector(".categories-scroll");
-      if (!categoriesContainer.value) {
-        console.error("categoriesContainer element not found in the DOM");
-      }
+    if (!this.categoriesContainer) {
+      console.error("categoriesContainer element not found in the DOM");
+    }
 
-      setActiveCategory(CategoriesStore.category_id);
+    this.setActiveCategory(this.CategoriesStore.category_id);
 
-      //   // Fetch produk initial
-      ProductsStore.fetch().then(() => {
-        filterProducts();
-      });
-
-      // useEffect/LaunchedEffect/sideEffect
-      watch(
-        () => CategoriesStore.category_id,
-        () => {
-          filterProducts();
-        }
-      );
+    this.ProductsStore.fetch().then(() => {
+      this.filterProducts();
     });
 
-    const filterProducts = () => {
-      ProductsStore.filteredProducts = ProductsStore.products.filter((prod) => {
-        const matchesCategory =
-          !CategoriesStore.category_id ||
-          prod.category_id === CategoriesStore.category_id;
-        const matchesSearch = prod.name
-          .toLowerCase()
-          .includes(ProductsStore.search.toLowerCase());
-        return matchesCategory && matchesSearch;
-      });
-    };
-
-    // Metode untuk scroll
-    const scrollLeft = () => {
-      if (categoriesContainer.value) {
-        categoriesContainer.value.scrollBy({
+    // Watcher menggunakan $watch
+    this.$watch(
+      () => this.CategoriesStore.category_id,
+      () => {
+        this.filterProducts();
+      }
+    );
+  },
+  methods: {
+    setActiveCategory(id) {
+      this.activeCategory = id;
+      this.CategoriesStore.setCategoryId(id);
+    },
+    filterProducts() {
+      this.ProductsStore.filteredProducts = this.ProductsStore.products.filter(
+        (prod) => {
+          const matchesCategory =
+            !this.CategoriesStore.category_id ||
+            prod.category_id === this.CategoriesStore.category_id;
+          const matchesSearch = prod.name
+            .toLowerCase()
+            .includes(this.ProductsStore.search.toLowerCase());
+          return matchesCategory && matchesSearch;
+        }
+      );
+    },
+    scrollLeft() {
+      if (this.categoriesContainer) {
+        this.categoriesContainer.scrollBy({
           left: -200,
           behavior: "smooth",
         });
       } else {
         console.warn("categoriesContainer is null");
       }
-    };
-
-    const scrollRight = () => {
-      if (categoriesContainer.value) {
-        categoriesContainer.value.scrollBy({
+    },
+    scrollRight() {
+      if (this.categoriesContainer) {
+        this.categoriesContainer.scrollBy({
           left: 200,
           behavior: "smooth",
         });
       } else {
         console.warn("categoriesContainer is null");
       }
-    };
-
-    // Kembalikan properti dan metode ke template
-    return {
-      CategoriesStore,
-      categoriesContainer,
-      scrollLeft,
-      scrollRight,
-      activeCategory,
-      setActiveCategory,
-      filterProducts,
-      ProductsStore,
-    };
+    },
   },
 };
 </script>

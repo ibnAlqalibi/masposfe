@@ -1,15 +1,17 @@
 <!-- ProductList.vue -->
 <template>
   <div class="max-w-7xl mx-auto pt-6 px-2">
-    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-4">
+    <div
+      class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-[8px] gap-y-[24px]"
+    >
       <!-- Product Card -->
       <div
         v-for="product in ProductsStore.filteredProducts"
         :key="product.id"
-        class="bg-white rounded-[16px] border border-[#d6d6d6] overflow-hidden min-w-0"
+        class="bg-white h-[298px] rounded-[16px] border border-[#d6d6d6] overflow-hidden min-w-0"
       >
         <!-- Product Image Container -->
-        <div class="relative aspect-square p-[8px]">
+        <div class="relative w-[200px] h-[177px] p-[8px]">
           <img
             :src="product.picture_url"
             :alt="product.name"
@@ -55,11 +57,11 @@
           <!-- Add to Cart Button -->
           <button
             v-if="!CartStore.cart.find((cart) => cart.id === product.id)"
-            class="regular w-full mt-1.5 sm:mt-2 bg-[#2C59E5] text-[#F5F5F5] py-1 sm:py-1.5 px-2 sm:px-3 rounded-[8px] text-[16px] flex items-center justify-center gap-1"
+            class="regular w-full h-[39px] mt-1.5 sm:mt-[12px] sm:mb-[8px] bg-[#2C59E5] text-[#F5F5F5] px-2 sm:px-3 rounded-[8px] flex items-center justify-center gap-1"
             @click="addToCart(product)"
           >
             <PlusIcon class="w-[16px] h-[16px] text-white" />
-            <span class="align-middle leading-none">Keranjang</span>
+            <span class="text-[16px]">Keranjang</span>
           </button>
           <div v-else class="flex items-center justify-between mt-1.5 sm:mt-2">
             <button
