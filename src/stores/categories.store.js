@@ -20,15 +20,17 @@ export const useCategoriesStore = defineStore({
       }
     },
     async add(data) {
-      const categories = await axiosWrapper.post(
+      const response = await axiosWrapper.post(
         `${baseUrl}/category`,
         data,
         true
       );
 
-      this.categories = categories.data;
+      if (response?.data) {
+        this.categories.push(response.data);
+      }
 
-      return categories;
+      return response;
     },
     async update(id, data) {
       return await axiosWrapper.put(`${baseUrl}/category/${id}`, data, true);

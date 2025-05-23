@@ -1,7 +1,9 @@
 <template>
   <div class="min-h-screen w-full flex justify-center bg-[#ecf0f2] py-12">
-    <div class="w-full max-w-md p-6 bg-white rounded-lg shadow">
-      <h2 class="text-lg font-medium mb-4">Tambah Produk</h2>
+    <div class="w-full max-w-md bg-white rounded-[16px] shadow overflow-hidden">
+      <div class="w-full bg-[#F5F5F5] p-[24px]">
+        <h2 class="regular text-[20px] font-[500]">Tambah Produk</h2>
+      </div>
       <form action="" @submit.prevent="create">
         <input
           type="file"
@@ -9,137 +11,144 @@
           class="hidden"
           @change="handleFileUpload"
         />
-        <div
-          v-if="!imagePreview"
-          class="border-2 border-dashed border-gray-300 rounded-lg p-8 mb-4 text-center cursor-pointer"
-          @click="triggerFileInput"
-          @dragover.prevent="onDragOver"
-          @dragleave="onDragLeave"
-          @drop="onDrop"
-          :class="{ 'border-blue-600 bg-blue-50': isDragging }"
-        >
+        <div class="p-[24px]">
           <div
-            class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2"
+            v-if="!imagePreview"
+            class="border-2 border-dashed border-gray-300 rounded-lg p-8 mb-4 text-center cursor-pointer"
+            @click="triggerFileInput"
+            @dragover.prevent="onDragOver"
+            @dragleave="onDragLeave"
+            @drop="onDrop"
+            :class="{ 'border-blue-600 bg-blue-50': isDragging }"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 text-blue-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+            <div
+              class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
-          </div>
-          <p class="text-sm text-gray-600">
-            Seret & Letakkan atau Klik Untuk Unggah
-          </p>
-          <p class="text-xs text-gray-500 mt-1">
-            Format yang didukung: jpg, png
-          </p>
-        </div>
-
-        <!-- Pratinjau Gambar -->
-        <div
-          v-else
-          class="relative border-2 border-dashed border-gray-300 rounded-lg p-4 mb-4 text-center cursor-pointer"
-          @click="triggerFileInput"
-          @dragover.prevent="onDragOver"
-          @dragleave="onDragLeave"
-          @drop="onDrop"
-        >
-          <img
-            :src="imagePreview"
-            alt="Preview"
-            class="max-h-40 mx-auto rounded-lg"
-          />
-          <p class="text-xs text-gray-500 mt-2">
-            Klik atau seret dan letakkan file baru untuk mengganti file
-          </p>
-        </div>
-
-        <!-- Pesan Error Gambar -->
-        <p v-if="errors.picture" class="text-red-500 text-xs mt-1">
-          {{ errors.picture }}
-        </p>
-
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Produk</label
-            >
-            <input
-              v-model="formData.name"
-              @input="formData.name = $event.target.value"
-              type="text"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-              placeholder="Produk"
-            />
-            <p v-if="errors.name" class="text-red-500 text-xs mt-1">
-              {{ errors.name }}
-            </p>
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Harga</label
-            >
-            <input
-              v-model="formData.price"
-              @input="formData.price = parseInt($event.target.value)"
-              type="number"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-              placeholder="Harga"
-            />
-            <p v-if="errors.price" class="text-red-500 text-xs mt-1">
-              {{ errors.price }}
-            </p>
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Pilih Kategori</label
-            >
-            <select
-              @change="formData.category_id = $event.target.value"
-              id="data-select"
-              v-model="formData.category_id"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-            >
-              <option value="" disabled selected>Pilih kategori</option>
-              <option
-                v-for="cat in categoriesStore.categories"
-                :key="cat.id"
-                :value="cat.id"
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-blue-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                {{ cat.name }}
-              </option>
-            </select>
-            <p v-if="errors.category_id" class="text-red-500 text-xs mt-1">
-              {{ errors.category_id }}
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+            </div>
+            <p class="regular text-sm text-gray-600">
+              Seret & Letakkan atau Klik Untuk Unggah
+            </p>
+            <p class="regular text-xs text-gray-500 mt-1">
+              Format yang didukung: jpg, png
             </p>
           </div>
 
-          <div class="flex space-x-4 pt-2">
-            <button
-              type="button"
-              @click="$router.push('/')"
-              class="flex-1 px-4 py-2 text-blue-600 bg-white border border-blue-600 rounded-md hover:bg-blue-50 focus:outline-none"
-            >
-              Batal
-            </button>
-            <button
-              type="submit"
-              class="flex-1 px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none"
-            >
-              Tambah
-            </button>
+          <!-- Pratinjau Gambar -->
+          <div
+            v-else
+            class="relative border-2 border-dashed border-gray-300 rounded-lg p-4 mb-4 text-center cursor-pointer"
+            @click="triggerFileInput"
+            @dragover.prevent="onDragOver"
+            @dragleave="onDragLeave"
+            @drop="onDrop"
+          >
+            <img
+              :src="imagePreview"
+              alt="Preview"
+              class="max-h-40 mx-auto rounded-lg"
+            />
+            <p class="regular text-xs text-gray-500 mt-2">
+              Klik atau seret dan letakkan file baru untuk mengganti file
+            </p>
           </div>
+
+          <!-- Pesan Error Gambar -->
+          <p v-if="errors.picture" class="text-red-500 text-xs mt-1">
+            {{ errors.picture }}
+          </p>
+
+          <div class="space-y-4">
+            <div>
+              <label
+                class="regular block text-sm font-medium text-gray-700 mb-1"
+                >Produk</label
+              >
+              <input
+                v-model="formData.name"
+                @input="formData.name = $event.target.value"
+                type="text"
+                class="regular w-full px-3 py-2 border border-gray-800 bg-gray-50 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                placeholder="Produk"
+              />
+              <p v-if="errors.name" class="text-red-500 text-xs mt-1">
+                {{ errors.name }}
+              </p>
+            </div>
+
+            <div>
+              <label
+                class="regular block text-sm font-medium text-gray-700 mb-1"
+                >Harga</label
+              >
+              <input
+                v-model="formData.price"
+                @input="formData.price = parseInt($event.target.value)"
+                type="number"
+                class="regular w-full px-3 py-2 border border-gray-700 bg-[#FCFCFC] rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                placeholder="Harga"
+              />
+              <p v-if="errors.price" class="text-red-500 text-xs mt-1">
+                {{ errors.price }}
+              </p>
+            </div>
+
+            <div>
+              <label
+                class="regular block text-sm font-medium text-gray-700 mb-1"
+                >Pilih Kategori</label
+              >
+              <select
+                @change="formData.category_id = $event.target.value"
+                id="data-select"
+                v-model="formData.category_id"
+                class="regular w-full px-3 py-2 border border-gray-800 bg-gray-50 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+              >
+                <option class="regular" value="" disabled selected>
+                  Pilih kategori
+                </option>
+                <option
+                  class="regular"
+                  v-for="cat in categoriesStore.categories"
+                  :key="cat.id"
+                  :value="cat.id"
+                >
+                  {{ cat.name }}
+                </option>
+              </select>
+              <p v-if="errors.category_id" class="text-red-500 text-xs mt-1">
+                {{ errors.category_id }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="flex space-x-4 p-[24px] border-t border-px border-gray-200">
+          <button
+            type="button"
+            @click="$router.push('/')"
+            class="regular flex-1 px-4 py-2 text-blue-600 bg-white border border-blue-600 rounded-md hover:bg-blue-50 focus:outline-none"
+          >
+            Batal
+          </button>
+          <button
+            type="submit"
+            class="regular flex-1 px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none"
+          >
+            Tambah
+          </button>
         </div>
       </form>
     </div>

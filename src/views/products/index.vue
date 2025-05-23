@@ -1,6 +1,6 @@
 <!-- ProductList.vue -->
 <template>
-  <div class="max-w-7xl mx-auto pt-6 px-2">
+  <div class="max-w-7xl mx-auto pt-6 px-2 3xl:px-[2px]">
     <div
       class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-[8px] gap-y-[24px]"
     >
@@ -84,6 +84,11 @@
       </div>
     </div>
   </div>
+  <ConfirmDeleteModal
+    :isOpen="showConfirm"
+    @close="showConfirm = false"
+    @confirm="handleConfirmDelete"
+  />
 </template>
 
 <script>
@@ -92,17 +97,21 @@ import { useCategoriesStore } from "@/stores/categories.store.js";
 import { useCartStore } from "@/stores/cart.store.js";
 import CategoriesView from "@/views/categories/index.vue";
 import { PlusIcon } from "@heroicons/vue/24/solid";
+import ConfirmDeleteModal from "@/utils/components/deleteModal.vue";
 
 export default {
   components: {
     CategoriesView,
     PlusIcon,
+    ConfirmDeleteModal,
   },
   data() {
     return {
       ProductsStore: useProductsStore(),
       CategoriesStore: useCategoriesStore(),
       CartStore: useCartStore(),
+      showConfirm: false,
+      deleteId: null,
     };
   },
   methods: {
@@ -130,18 +139,13 @@ export default {
       };
       this.CartStore.add(cartData);
     },
-    async deleteData(id) {
-      const confirm = await this.$swal({
-        title: "Konfirmasi hapus",
-        text: "Anda yakin ingin menghapus produk ini?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Ya",
-      });
-
-      if (confirm.isConfirmed) {
-        await this.ProductsStore.delete(id);
-      }
+    deleteData(id) {
+      this.deleteId = id;
+      this.showConfirm = true;
+    },
+    async handleConfirmDelete() {
+      await this.ProductsStore.delete(this.deleteId);
+      this.showConfirm = false;
     },
     updateData(prod) {
       this.ProductsStore.cat = prod;

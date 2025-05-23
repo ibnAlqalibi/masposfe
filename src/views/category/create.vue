@@ -1,5 +1,6 @@
 <script>
 import { useCategoriesStore } from "@/stores/categories.store.js";
+import { toast } from "vue3-toastify";
 
 export default {
   data() {
@@ -34,13 +35,29 @@ export default {
 
       if (this.isNameDuplicate) {
         this.errors.name = "Nama Kategori Sudah ada.";
+        toast("Nama Kategori Sudah ada.", {
+          autoClose: 2000,
+          type: "error",
+          position: toast.POSITION.TOP_RIGHT,
+        });
         return;
       }
 
       let cat = await this.categoriesStore.add(this.formData);
-
       if (cat) {
-        this.$router.push("/");
+        this.formData.name = null;
+        toast("Kategori Berhasil Ditambahkan", {
+          autoClose: 2000,
+          type: "success",
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      } else {
+        this.errors.name = "Gagal menambahkan kategori.";
+        toast("Gagal menambahkan kategori.", {
+          autoClose: 2000,
+          type: "error",
+          position: toast.POSITION.TOP_RIGHT,
+        });
       }
     },
   },
@@ -63,7 +80,10 @@ export default {
             v-model="formData.name"
             type="text"
             id="name"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+            :class="[
+              'w-full px-3 py-2 border rounded-md bg-[#F5F5F5] focus:outline-none focus:ring-1 focus:ring-blue-500',
+              errors.name ? 'border-red-500' : 'border-gray-800',
+            ]"
             placeholder="Produk"
           />
           <span v-if="errors.name" class="text-red-500 text-sm">{{

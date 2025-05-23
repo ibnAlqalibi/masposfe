@@ -37,13 +37,9 @@ function request(method) {
 
     return axios(requestOptions)
       .then((response) => {
-        if (notification) {
-          toast(response.data.message, {
-            autoClose: 2000,
-            type: "success",
-            position: toast.POSITION.BOTTOM_RIGHT,
-          });
-        }
+        // if (notification) {
+        //
+        // }
 
         response.data.status = response.status;
 

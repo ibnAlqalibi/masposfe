@@ -1,6 +1,8 @@
 <template>
   <div class="bg-[#ecf0f2] min-h-screen pt-6">
-    <header class="bg-white p-2 rounded-lg shadow-md w-[1260px] mx-auto">
+    <header
+      class="bg-white p-2 rounded-lg shadow-md w-[1260px] 3xl:w-[1376px] mx-auto"
+    >
       <div class="px-4 sm:px-6 lg:px-8">
         <!-- Top Section -->
         <div class="flex items-center justify-between h-16">
