@@ -38,33 +38,18 @@
       ref="categoriesContainer"
       class="flex space-x-[16px] overflow-x-auto categories-scroll"
     >
-      <button
-        :key="'semua'"
+      <CategoryButton
+        name="Semua"
+        :isActive="activeCategory === null"
         @click="setActiveCategory(null)"
-        :class="
-          activeCategory === null
-            ? 'bg-[#2C59E5] text-white'
-            : 'text-[#2C59E5] bg-blue-50'
-        "
-        class="px-[16px] h-[32px] rounded-lg text-sm whitespace-nowrap"
-      >
-        Semua
-      </button>
-
-      <!-- Tombol Kategori -->
-      <button
+      />
+      <CategoryButton
         v-for="category in CategoriesStore.categories"
         :key="category.id"
+        :name="category.name"
+        :isActive="activeCategory === category.id"
         @click="setActiveCategory(category.id)"
-        :class="
-          activeCategory === category.id
-            ? 'bg-[#2C59E5] text-white'
-            : 'text-[#2C59E5] bg-blue-50'
-        "
-        class="px-[16px] h-[32px] rounded-lg text-sm whitespace-nowrap"
-      >
-        {{ category.name }}
-      </button>
+      />
     </div>
 
     <button
@@ -128,14 +113,15 @@
 </template>
 
 <script>
-import { ref, watch } from "vue";
 import { useCategoriesStore } from "@/stores/categories.store.js";
 import { useProductsStore } from "@/stores/products.store.js";
 import { MagnifyingGlassIcon } from "@heroicons/vue/24/outline";
+import CategoryButton from "@/utils/components/categoryButton.vue";
 
 export default {
   components: {
     MagnifyingGlassIcon,
+    CategoryButton,
   },
   data() {
     return {
