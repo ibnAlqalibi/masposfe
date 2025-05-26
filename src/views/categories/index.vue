@@ -110,7 +110,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, nextTick } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useCategoriesStore } from "@/stores/categories.store";
 import { useProductsStore } from "@/stores/products.store";
 import { MagnifyingGlassIcon } from "@heroicons/vue/24/outline";
@@ -156,11 +156,6 @@ onMounted(async () => {
 
   await ProductsStore.fetch();
   filterProducts();
-
-  await nextTick();
-  if (!categoriesContainer.value) {
-    console.warn("categoriesContainer is not yet available in the DOM");
-  }
 });
 
 watch(
